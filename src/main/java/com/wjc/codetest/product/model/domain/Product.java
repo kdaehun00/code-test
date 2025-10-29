@@ -38,6 +38,17 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /*
+    문제: category를 String으로 관리하면 오타, 잘못된 값, 대소문자 불일치 등 데이터 무결성 저하 가능성이 있음 (자주 바뀌지 않는 값이라는 가정 하에)
+    원인: category가 단순 String 타입이기 때문에 @Valid와 같은 Bean Validation을 통한 도메인 제약 검증이 어려움.
+    개선안: Enum 타입으로 category를 관리하여 코드 레벨에서 유효값을 한정
+        - 매핑 시:
+          @Enumerated(EnumType.STRING) -> 없으면 enum의 순서 숫자를 DB에 저장할 수도 있음.
+          private Category category;
+    선택 근거:
+    - category의 값은 제한된 집합이고, 오타나 유효하지 않은 문자열을 막는 것이 중요하므로 Enum 사용이 적절함
+    - DB 차원에서는 유효성 검증을 하기보다는 확장성을 위해 애플리케이션 레벨에서만 유효성 검증을 해야 함
+    */
     @Column(name = "category")
     private String category;
 
