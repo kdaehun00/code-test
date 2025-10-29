@@ -39,6 +39,11 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    /*
+    문제: RESTful 규칙 위반으로 인한 동작 혼란
+    원인: 리소스 삭제 동작이지만 PostMapping 사용
+    개선안: DeleteMapping으로 변경, delete 제거
+    */
     @PostMapping(value = "/delete/product/{productId}")
     public ResponseEntity<Boolean> deleteProduct(@PathVariable(name = "productId") Long productId){
         productService.deleteById(productId);
