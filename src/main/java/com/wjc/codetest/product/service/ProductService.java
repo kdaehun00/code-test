@@ -89,3 +89,13 @@ public class ProductService {
         return productRepository.findDistinctCategories();
     }
 }
+
+/*
+문제: 트랜잭션 경계 설정 미비
+원인: @Transactional 미적용 → update/delete 수행 시 원자성 보장되지 않음
+개선안:
+  - 데이터 변경 메서드(create, update, delete)에 @Transactional 추가
+  - 조회용 메서드에는 @Transactional(readOnly = true) 적용
+효과:
+  - 데이터 정합성 및 트랜잭션 안정성 확보
+*/
