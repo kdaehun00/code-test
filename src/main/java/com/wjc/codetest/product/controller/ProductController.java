@@ -18,7 +18,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-
+    /*
+    문제: API가 RESTFul 하지 않음.
+    원인: RESTful API 네이밍 규칙을 따르지 않고 get 키워드를 URL에 포함함.
+    개선안: URL에서 동사를 제거하고 리소스 명사 중심으로 변경
+          (ex - /products/{productId})
+    효과:
+      - RESTful 규칙 준수
+      - 일관된 API 설계
+    */
     @GetMapping(value = "/get/product/by/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable(name = "productId") Long productId){
         Product product = productService.getProductById(productId);
