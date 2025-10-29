@@ -74,6 +74,22 @@ public class ProductController {
         return ResponseEntity.ok(true);
     }
 
+    /*
+    문제:
+      - 엔티티 객체(Product)를 그대로 API 응답으로 반환하고 있음
+      - JPA 엔티티의 내부 구조가 그대로 직렬화되어 노출될 가능성 존재
+      - 엔티티 변경 시 API 스펙이 의도치 않게 변동될 수 있음
+    원인:
+      - 서비스 계층의 반환 객체를 그대로 Controller 응답에 사용함
+      - DTO 변환 계층(응답 전용 Response DTO) 부재
+    개선안:
+      - 응답 전용 DTO 클래스 생성 후 변환하여 반환
+      - 도메인 엔티티는 영속성 관리 및 비즈니스 로직 전용으로만 사용
+    효과:
+      - 데이터 노출 범위 제어로 보안성 향상
+      - API 응답 구조의 일관성 유지
+      - 엔티티 변경이 외부 스펙에 영향을 주지 않아 유지보수성 개선
+    */
     @PostMapping(value = "/update/product")
     public ResponseEntity<Product> updateProduct(@RequestBody UpdateProductRequest dto){
         Product product = productService.update(dto);
