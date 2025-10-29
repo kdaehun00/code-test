@@ -15,6 +15,13 @@ import lombok.Setter;
 public class Product {
 
     @Id
+    /*
+    문제: null값이 들어올 수 있는 상황
+    원인: @Column(nullable = true)가 기본값이기 때문에,
+      DB 컬럼에 null이 허용됨 → 데이터 무결성 저해
+    개선안: 1. @Column(nullable = false)로 명시하여 not null 제약 조건을 추가
+          2. 엔티티 생성 시 생성자/Builder 패턴을 통해 필수 값 검증 로직 추가
+    */
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
