@@ -37,6 +37,23 @@ public class ProductService {
     public Product getProductById(Long productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
         if (!productOptional.isPresent()) {
+
+            /*
+            문제:
+              - 예외 처리 일관성 부족
+              - 하드코딩으로 인해 생산성 및 일관성 저하
+              - 단순 런타임 에러로 예외 원인 구분 어려움
+            원인: 에러를 단순 RuntimeException로 하드코딩
+            개선안:
+              - 커스텀 예외 클래스 생성 후 사용
+                1. 커스텀 예외 클래스 생성 및 RuntimeException을 extends (ex - ProductException)
+                2. 에러코드를 Global 파일에 enum으로 선언 및 도메인별 enum을 분리하고 상위 enum 상속
+                3. GlobalExceptionHandler에 CustomException 추가
+              - 전역 예외 처리 핸들러(@RestControllerAdvice)에서 공통 응답 포맷 관리
+            효과:
+              - 에러 로깅 및 사용자 응답 일관성 확보
+              - 서비스 전반의 유지보수성 향상
+            */
             throw new RuntimeException("product not found");
         }
         return productOptional.get();
