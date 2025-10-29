@@ -23,6 +23,18 @@ public class Product {
           2. 엔티티 생성 시 생성자/Builder 패턴을 통해 필수 값 검증 로직 추가
     */
     @Column(name = "product_id")
+    /*
+    문제: DB별로 기본 키 생성 전략이 다르기 때문에,
+        AUTO 전략은 예측 불가능한 동작을 야기할 수 있음.
+    원인: GenerationType.AUTO는 JPA 구현체가 DB에 따라 자동으로 ID 생성 전략을 선택하기 때문
+    개선안: 프로젝트에서 사용하는 DB에 맞춰 명시적으로 전략 설정
+      - MySQL: GenerationType.IDENTITY
+      - Oracle / PostgreSQL: GenerationType.SEQUENCE
+      - DB 독립적으로 관리하고 싶다면 @TableGenerator 사용 고려
+    트레이드오프:
+    - AUTO는 DB를 바꿔도 별도 수정 없이 동작 가능 -> 유연성 높음
+    - 그러나 실제 운영 DB가 바뀌면 ID 생성 방식이 달라져 예기치 않은 문제 발생 가능
+    */
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
