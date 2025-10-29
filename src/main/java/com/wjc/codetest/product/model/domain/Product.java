@@ -58,10 +58,28 @@ public class Product {
     protected Product() {
     }
 
+    /*
+    문제: 생성자 내 필드가 어떤 값인지 예측하기 어려움. 유연성이 낮음.
+    원인: 불필요하게 직접 필드를 세팅하는 생성자를 작성하여 객체 생성 방식이 불명확해짐
+    개선안:
+      - 불변성과 일관성 확보를 위해 @RequiredArgsConstructor와 @Builder로 대체
+      - 객체 생성 시 필요한 필드에 final 추가
+    효과:
+      - 필요한 데이터만 설정 가능
+      - 유연성 확보
+      - 가독성 향상 (builder 사용 시 .name("value") 과 같은 형태로 명시적임.)
+      - 변경 가능성 최소화
+    */
     public Product(String category, String name) {
         this.category = category;
         this.name = name;
     }
+
+    /*
+    문제: 불필요한 코드로 가독성 저하
+    원인: getter와 중복 사용
+    개선안: getter 사용으로 깔끔한 코드 구조 유지
+    */
 
     public String getCategory() {
         return category;
