@@ -25,6 +25,19 @@ import java.util.List;
   - URL 구조 일관성 확보
   - 가독성 향상 및 유지보수 용이
 */
+
+/*
+문제: API 버저닝 미적용으로, 향후 스펙 변경 시 하위 호환성 유지 어려움
+원인:
+  - @RequestMapping에 버전 정보 미포함
+  - 동일 URI로 여러 버전의 API가 공존할 경우 충돌 위험 존재
+개선안:
+  - @RequestMapping("/api/v1/product") 형식으로 버전 및 리소스 명시
+  - 이후 변경 시 /api/v2/... 형태로 확장 가능
+효과:
+  - API 버전별 관리 용이
+  - 유지보수성 및 확장성 향상
+*/
 @RequestMapping
 @RequiredArgsConstructor
 public class ProductController {
