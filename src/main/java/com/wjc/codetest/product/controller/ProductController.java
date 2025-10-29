@@ -57,6 +57,16 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    /*
+    문제: 새로운 자원이 생성되었음을 명확히 표현하지 못함
+    원인: HTTP 상태 코드 의미 미고려
+    개선안:
+      - 201 Created 사용하여 자원 생성 의도 명확히 표현
+      - Location 헤더에 생성된 자원의 URI 포함
+    효과:
+      - 클라이언트가 생성된 자원의 위치를 즉시 파악 가능
+      - API 명확성 및 표준성 향상
+    */
     @PostMapping(value = "/create/product")
     public ResponseEntity<Product> createProduct(@RequestBody CreateProductRequest dto){
         Product product = productService.create(dto);
@@ -67,6 +77,16 @@ public class ProductController {
     문제: RESTful 규칙 위반으로 인한 동작 혼란
     원인: 리소스 삭제 동작이지만 PostMapping 사용
     개선안: DeleteMapping으로 변경, delete 제거
+    */
+
+    /*
+    문제: 삭제 또는 업데이트 응답으로 단순 boolean(true) 반환
+    원인: 현재 구현에서 update/delete 동작 후 엔티티나 DTO를 반환하지 않고 단순 boolean만 반환
+    개선안:
+      - 반환할 데이터가 있는 경우: 200 OK / 반환할 데이터가 없는 경우 (현재): 204 No Content 권장
+    효과:
+      - 클라이언트에서 변경된 상태를 명확히 확인 가능
+      - API 응답 일관성
     */
     @PostMapping(value = "/delete/product/{productId}")
     public ResponseEntity<Boolean> deleteProduct(@PathVariable(name = "productId") Long productId){
