@@ -20,6 +20,11 @@ public class ProductListResponse {
     private List<Product> products;
     private int totalPages;
     private long totalElements;
+    /*
+    문제: FE에서 데이터를 이어받아 무한 스크롤 또는 페이지네이션 UI를 처리하기 어려움
+    원인: 마지막 페이지인지에 대한 여부가 없음
+    개선안: isLast라는 boolean 타입을 선언하며 마지막 페이지인지에 대한 여부를 FE 측에 전달함.
+    */
     private int page;
 
     /*
