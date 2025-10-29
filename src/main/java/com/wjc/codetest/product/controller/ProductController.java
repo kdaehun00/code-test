@@ -14,6 +14,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+/*
+문제: 엔드포인트의 리소스 구분이 불명확함
+원인:
+  - @RequestMapping에 공통 prefix 미지정
+  - 각 메서드마다 "/product" 경로를 반복적으로 선언함
+개선안:
+  - 클래스 단위 @RequestMapping("/product") 추가
+효과:
+  - URL 구조 일관성 확보
+  - 가독성 향상 및 유지보수 용이
+*/
 @RequestMapping
 @RequiredArgsConstructor
 public class ProductController {
