@@ -56,6 +56,20 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    /*
+    문제: 단순 조회 요청임에도 @PostMapping과 @RequestBody 사용
+    원인:
+      - 페이지네이션 정보를 JSON Body로 전달하도록 설계
+      - 무한 스크롤이나 단순 목록 조회에 비해 불필요하게 요청 복잡도 증가
+    개선안:
+      - @GetMapping으로 변경하고, 페이지·카테고리 등은 @RequestParam으로 전달
+        (ex - /products?category=book&page=1&size=10)
+      - 무한 스크롤 방식이라면 page 대신 cursor 기반 요청
+    효과:
+      - RESTful 원칙 준수 (조회 요청 → GET)
+      - API 사용성 향상
+      - 무한 스크롤 구현 시 FE/BE 간 데이터 흐름 단순화
+    */
     @PostMapping(value = "/product/list")
     public ResponseEntity<ProductListResponse> getProductListByCategory(@RequestBody GetProductListRequest dto){
         Page<Product> productList = productService.getListByCategory(dto);
