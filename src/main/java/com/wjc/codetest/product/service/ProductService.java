@@ -96,6 +96,23 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    /*
+    문제:
+      - 만약 category를 따로 테이블을 분리하고 연관관계를 설정했을 경우 -
+      - @EntityGraph 또는 fetch join과 Pageable을 함께 사용 시 JPA에서 경고 발생
+      - 메모리 내 페이징으로 인한 성능 저하 및 대용량 데이터 처리 불가
+    원인:
+      - 일대다 관계에서 JOIN 사용 시 자식 엔티티 개수만큼 부모 엔티티가 중복 조회됨
+      - JPA는 이를 위험하다 판단하여 DB 쿼리 결과를 메모리로 가져온 후 페이징 처리
+      - 결과적으로 LIMIT/OFFSET이 DB 레벨에서 적용되지 않고 풀 테이블 스캔 발생
+    개선안:
+      1. id를 먼저 페이지네이션으로 조회
+      2. 그 id 목록을 바탕으로 fetch join으로 관련 데이터 조회
+    효과:
+      - DB 레벨에서 LIMIT/OFFSET 적용으로 성능 개선
+      - 메모리 페이징 제거로 대용량 데이터 처리 가능
+      - 정확한 페이지네이션 동작
+    */
     public Page<Product> getListByCategory(GetProductListRequest dto) {
         PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(Sort.Direction.ASC, "category"));
         return productRepository.findAllByCategory(dto.getCategory(), pageRequest);
