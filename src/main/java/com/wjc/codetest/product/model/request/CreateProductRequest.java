@@ -23,6 +23,11 @@ import lombok.Setter;
   - 필드 필수/선택 여부가 명확
 */
 public class CreateProductRequest {
+    /*
+    문제: 유효하지 않은 데이터를 허용할 가능성이 있음
+    원인: 빈칸이나 null 값에 대한 검증이 없음.
+    개선안: @NotBlank, @Valid 등 검증 애노테이션을 사용하여 데이터 유효성 검사 수행
+    */
     private String category;
     private String name;
 
