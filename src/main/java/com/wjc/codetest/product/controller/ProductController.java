@@ -90,6 +90,24 @@ public class ProductController {
       - API 응답 구조의 일관성 유지
       - 엔티티 변경이 외부 스펙에 영향을 주지 않아 유지보수성 개선
     */
+
+    /*
+    문제:
+      - RESTful 규칙 위반 - 리소스 부분 수정에 PostMapping 사용
+      - POST는 멱등하지 않아 같은 요청을 여러 번 보내면 예측 불가능한 결과 발생 가능
+    원인:
+      - 부분 업데이트 시 적절한 HTTP 메서드 미사용
+    개선안:
+      - PatchMapping으로 변경하여 부분 업데이트 의도를 명확히 표현
+    효과:
+      - 클라이언트와 서버 간 의도 명확화
+      - 멱등성 보장
+    생각해볼 점:
+      - PUT vs PATCH
+        -> PUT: 전체 리소스 교체 (멱등함, 누락된 필드는 null로 설정, 기존 리소스가 없는 경우 새로 생성)
+        -> PATCH: 부분 리소스 수정 (멱등할 수도 있고 아닐 수도 있다, 명시된 필드만 수정)
+        -> 현재 UpdateProductRequest는 일부 필드만 받으므로 PATCH 사용 권장
+    */
     @PostMapping(value = "/update/product")
     public ResponseEntity<Product> updateProduct(@RequestBody UpdateProductRequest dto){
         Product product = productService.update(dto);
