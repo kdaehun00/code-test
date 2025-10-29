@@ -26,6 +26,14 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    /*
+    문제: Optional 처리 시 가독성 저하 및 불필요한 조건문 존재
+    원인: isPresent() / get() 조합으로 null 체크 수행
+    개선안: Optional의 orElseThrow() 사용으로 간결화
+          ex - Product product = productRepository.findById(productId)
+                 .orElseThrow(() -> new RuntimeException("product not found"));
+    효과: 가독성 향상, NPE 방지, 코드 라인 수 감소
+    */
     public Product getProductById(Long productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
         if (!productOptional.isPresent()) {
