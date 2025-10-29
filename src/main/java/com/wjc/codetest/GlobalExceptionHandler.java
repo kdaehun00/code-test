@@ -43,3 +43,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
+
+/*
+문제: Exception 부족 -> 보완 필요
+원인: Exception을 잡고 있지 않는 것들이 있어 의도한 메시지를 출력하지 않고 Spring에서 자동으로 처리함.
+     -> 응답 메시지 형식 불일치
+개선안(추가할 내용):
+  - MethodArgumentNotValidException           (Request Body의 @Valid 검증)
+  - ConstraintViolationException              (Request Param / PathVariable의 @Valid 검증)
+  - MethodArgumentTypeMismatchException       (잘못된 파라미터 사용 시)
+  - MissingRequestCookieException             (쿠키를 사용한다면)
+  - MissingServletRequestParameterException   (빠진 파라미터가 있는 경우)
+  - HttpMessageNotReadableException           (Enum 타입에서 벗어났을 때)
+  - DataIntegrityViolationException           (DB 제약조건 위반)
+*/
