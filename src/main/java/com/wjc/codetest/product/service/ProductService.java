@@ -101,6 +101,17 @@ public class ProductService {
         return productRepository.findAllByCategory(dto.getCategory(), pageRequest);
     }
 
+    /*
+    문제: Product 수가 많아질수록 getUniqueCategories 쿼리 속도가 느려질 수 있음
+    원인: Product 테이블에서 category를 추출하기 때문에, 대량 데이터일 경우 full scan 발생 가능
+    개선안:
+      - category를 별도 테이블로 분리하고 Product와 연관관계를 맺어 관리
+      - 필요 시 캐싱 적용으로 조회 부담 최소화
+    효과:
+      - 쿼리 성능 개선
+      - 도메인 책임 분리 및 유지보수 용이성 향상
+      - 빈번한 category 조회 시 서비스 안정성 증가, 활용도 증가
+    */
     public List<String> getUniqueCategories() {
         return productRepository.findDistinctCategories();
     }
