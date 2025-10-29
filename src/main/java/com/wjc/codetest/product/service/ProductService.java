@@ -75,6 +75,22 @@ public class ProductService {
 
     }
 
+    /*
+    문제:
+      - 삭제 로직이 서비스 계층에 직접 구현되어 있어 도메인 규칙과의 분리가 모호함
+      - 도메인 객체의 불변성 및 원자성을 보장하기 어려움
+    원인:
+      - 도메인 내부에 삭제 책임을 위임하지 않고 서비스 레벨에서 직접 Repository를 호출함
+      - 도메인 주도 설계 관점의 애그리게잇 경계를 고려하지 않음
+    개선안:
+      - 도메인 엔티티 내에 `delete()` 메서드를 정의하여 스스로 상태를 관리하도록 변경
+        → 상태 플래그 변경(soft delete) 포함
+      - 서비스 계층은 도메인 로직을 단순히 호출만 하도록 역할 단순화
+    효과:
+      - 도메인 중심의 책임 분리 및 비즈니스 규칙 일관성 확보
+      - 삭제 로직 변경 시 서비스 영향 최소화
+      - 유지보수성과 테스트 용이성 향상
+    */
     public void deleteById(Long productId) {
         Product product = getProductById(productId);
         productRepository.delete(product);
