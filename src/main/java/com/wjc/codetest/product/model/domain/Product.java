@@ -89,3 +89,21 @@ public class Product {
         return name;
     }
 }
+
+/*
+추가적인 개선사항: 삭제 시간 필드
+문제: Product 엔티티에서는 하드 딜리트만 가능할 것으로 보임. -> 삭제된 데이터의 이력이 남지 않음.
+원인: Product 엔티티에 delete_at 컬럼이 없음.
+개선안:
+  1. Soft Delete 필드를 추가 (deletedAt)
+  2. 삭제 시 해당 필드를 업데이트하고, 조회 쿼리에서 삭제되지 않은 데이터만 필터링
+*/
+
+/*
+추가적인 개선사항: 생성/수정 시간 필드
+문제: Product 엔티티에서 생성 시각(createdAt)과 수정 시각(updatedAt)을 추적하지 않음.
+원인: 해당 컬럼이 정의되어 있지 않아 데이터 변경 이력 확인 불가.
+개선안:
+  1. createdAt, updatedAt 컬럼 추가
+  2. @PrePersist, @PreUpdate 또는 JPA Auditing(@CreatedDate, @LastModifiedDate) 사용
+*/
