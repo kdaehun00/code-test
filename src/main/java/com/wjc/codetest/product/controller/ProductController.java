@@ -76,6 +76,19 @@ public class ProductController {
         return ResponseEntity.ok(new ProductListResponse(productList.getContent(), productList.getTotalPages(), productList.getTotalElements(), productList.getNumber()));
     }
 
+    /*
+    문제: 동일한 카테고리 목록에 대한 반복 조회 발생 가능성
+    원인:
+      - 카테고리 데이터는 변경 빈도가 낮지만 모든 요청마다 DB 조회 수행
+      - 불필요한 I/O 부하 발생 및 응답 지연 가능, 불필요하게 DB Connection을 점유
+    개선안:
+      - 캐싱 도입 (카테고리 변경 시 무효화 전략 설계)
+      - 변경 주기가 명확하지 않다면 TTL 기반 캐싱 고려
+    효과:
+      - DB 부하 감소
+      - 응답 속도 향상
+      - API 안정성 개선
+    */
     @GetMapping(value = "/product/category/list")
     public ResponseEntity<List<String>> getProductListByCategory(){
         List<String> uniqueCategories = productService.getUniqueCategories();
