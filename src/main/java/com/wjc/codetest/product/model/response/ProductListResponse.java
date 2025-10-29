@@ -22,6 +22,17 @@ public class ProductListResponse {
     private long totalElements;
     private int page;
 
+    /*
+    문제: Spring Data의 Page 객체를 활용하지 않고, 페이지네이션을 수동으로 처리하여 중복 코드 발생
+
+    원인:
+      - Page 객체의 기능을 활용하지 않음
+      - 페이지네이션 로직을 매번 수동으로 작성해야 함
+
+    개선안:
+      - Spring Data의 Page 인터페이스 직접 반환
+        (ex - ProductListResponse(Page<Product> page) 와 같은 형식으로 작성
+    */
     public ProductListResponse(List<Product> content, int totalPages, long totalElements, int number) {
         this.products = content;
         this.totalPages = totalPages;
