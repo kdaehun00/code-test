@@ -27,6 +27,17 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+/*
+문제: ProductService가 조회와 변경 로직을 모두 포함하고 있음
+원인: 서비스 계층에서 Command와 Query가 혼재되어 있어 역할이 명확하지 않음
+개선안:
+  - 조회 전용 서비스(ProductQueryService)와 변경 전용 서비스(ProductCommandService)로 분리
+  - 조회 서비스에는 @Transactional(readOnly = true) 기본 적용
+  - 변경 서비스에는 create/update/delete 로직만 포함
+효과:
+  - 서비스 계층의 역할 명확화
+  - 향후 CQRS 또는 MSA 구조로 확장 용이
+*/
 public class ProductService {
 
     private final ProductRepository productRepository;
