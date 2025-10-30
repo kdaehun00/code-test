@@ -12,7 +12,19 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-
+    /*
+    문제: 메서드 파라미터 이름이 혼란을 유발할 수 있음
+    원인:
+      - findAllByCategory(String name, Pageable pageable)에서 category 대신 name이라는 파라미터명을 사용
+      - 메서드명과 파라미터명이 불일치하여 읽는 사람에게 혼동 가능
+    개선안:
+      - 파라미터명을 category로 변경하여 메서드명과 일치시키기
+        (ex - findAllByCategory(String category, Pageable pageable))
+    효과:
+      - 가독성 향상
+      - 메서드 의도와 파라미터 의미 명확화
+      - 코드 유지보수성 향상
+    */
     /*
     문제: 삭제된 데이터까지 포함될 가능성
     원인:
