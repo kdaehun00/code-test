@@ -67,6 +67,20 @@ public class ProductController {
       - 클라이언트가 생성된 자원의 위치를 즉시 파악 가능
       - API 명확성 및 표준성 향상
     */
+
+    /*
+    문제:
+      - CreateProductRequest, UpdateProductRequest의 필드 유효성 검사 없음
+      - null이나 유효하지 않은 데이터가 서비스 계층에 전달될 수 있음
+      - 비즈니스 로직 전에 데이터 검증이 이루어지지 않음
+    원인:
+      - @Valid 어노테이션 미사용
+    개선안:
+      - DTO에 검증 어노테이션 적용 후 Controller 내 인자에서 @Valid 적용
+    효과:
+      - 잘못된 데이터에 대해 조기 에러 반환
+      - 서비스 계층의 부담 감소
+    */
     @PostMapping(value = "/create/product")
     public ResponseEntity<Product> createProduct(@RequestBody CreateProductRequest dto){
         Product product = productService.create(dto);
