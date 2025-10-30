@@ -13,7 +13,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
+/*
+문제: 현재 ProductService에 @Slf4j만 선언되어 있고, 실제 로그 호출이 없음
+원인: DB I/O 또는 상태 변경이 발생하는 메서드에서 로그를 남기지 않아 운영 중 데이터 흐름 추적이 어려움
+개선안:
+  - create, update, delete 등 상태 변경 메서드에서 info/debug 수준의 로그 추가
+  - 필요 시 예외 발생 시 warn/error 로그 기록
+효과:
+  - 운영 중 원인 추적 용이
+  - 서비스 내부 데이터 흐름 가시성 향상
+  - 문제 발생 시 빠른 대응 가능
+*/
 @Slf4j
 @Service
 @RequiredArgsConstructor
