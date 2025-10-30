@@ -12,7 +12,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/*
+문제: API 문서화 미흡
+원인:
+  - 컨트롤러 메서드에 Swagger/OpenAPI 어노테이션 부재
+  - 엔드포인트, 파라미터, 응답 구조가 자동 문서화되지 않아 FE 개발자나 외부 사용자에게 API 명세 제공 어려움
+개선안:
+  - 각 컨트롤러 메서드에 @Operation, @Parameter, @ApiResponse 등 OpenAPI 어노테이션 추가
+  - 전체 API는 @Tag를 사용해 그룹화
+효과:
+  - 자동화된 API 문서 생성 가능
+  - FE/BE 협업 및 외부 사용자에게 명확한 API 명세 제공
+  - 유지보수 편리
+*/
 @RestController
 /*
 문제: 엔드포인트의 리소스 구분이 불명확함
