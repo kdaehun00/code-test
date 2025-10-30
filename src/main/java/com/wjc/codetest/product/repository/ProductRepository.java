@@ -13,6 +13,17 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    /*
+    문제: 삭제된 데이터까지 포함될 가능성
+    원인:
+      - findAllByCategory(String, Pageable) 메서드에서 deleted 여부 필터링 미적용
+      - soft delete 적용 시, 실제 사용자가 삭제된 상품을 조회할 수 있음
+    개선안:
+      - JPQL로 선언 후 where deleted_at IS NULL 조건 추가 가능
+    효과:
+      - 삭제된 데이터가 조회되지 않아 사용자 혼란 방지
+      - soft delete 정책과 조회 로직 일관성 확보
+    */
     Page<Product> findAllByCategory(String name, Pageable pageable);
 
     /*
