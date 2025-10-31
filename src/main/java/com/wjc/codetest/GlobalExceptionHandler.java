@@ -9,6 +9,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Slf4j
+/*
+문제:
+  - @ControllerAdvice 사용 시 기본적으로 View를 반환하는 Controller에 맞춰져 있어,
+    REST API 응답(JSON) 처리 시 @ResponseBody를 매번 붙여야 함
+원인:
+  - @ControllerAdvice는 일반 MVC Controller용으로 설계됨
+  - 반환 타입 처리 방식은 여전히 View 중심
+개선안:
+  - REST API 전용이라면 @RestControllerAdvice로 변경하여 자동으로 ResponseBody 적용
+  - 전역 예외 처리 핸들러 내부에서 공통 응답 포맷을 정의하고, JSON 직렬화 일관성 확보
+효과:
+  - REST API 응답을 일관된 JSON 구조로 처리 가능
+  - 중복 @ResponseBody 제거로 코드 간결화
+  - 유지보수성 향상 및 예외 처리 표준화
+*/
 @ControllerAdvice(value = {"com.wjc.codetest.product.controller"})
 public class GlobalExceptionHandler {
 
